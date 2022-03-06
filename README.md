@@ -12,11 +12,13 @@ D-->H(etc ...)
 
 # 1 - Baixando a Biblia NVA
 Primeiro procedimento desse script é acessar o repositório da bíblia achar o livro desejado e imprimir, salvar o HTML. Simples assim!!
+
 video 1: https://youtu.be/Tcn5QlcZraE
 
 
 # 2 - Criando SQL da Biblia NVA
 Com o HTML baixado numa pasta e podemos trabalhar ele como quisermos, então lemos livro por livro, e quebramos os versos usando uma regex, montamos as querys SQL e ja guardamos o arquivo SQL que esta nessa pasta!! Detalho todo esse script no video a baixo:
+
 video 2: https://youtu.be/v4v1_vevRZQ
 
 
