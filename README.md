@@ -24,7 +24,7 @@ video 2: https://youtu.be/v4v1_vevRZQ
 # 3 - PDF da Biblia NVA
 com o SQL no banco de dados converteremos para PDF, com pequenas edições de CSS ja temos uma Biblia NVA em PDF pronta para Download!! Conseguimos baixar a bíblia NVA completa!! Detalho todo esse script no video a baixo:
 
-[PDF da Biblia NVA]:(https://github.com/Condiolov/Biblia-NVA/tree/master/3%20-%20Gerando%20o%20PDF%20da%20Biblia%20NVA/bibliaNVA.pdf)
+[PDF da Biblia NVA](https://github.com/Condiolov/Biblia-NVA/tree/master/3%20-%20Gerando%20o%20PDF%20da%20Biblia%20NVA/bibliaNVA.pdf)
 video 3: https://youtu.be/OFqlrfqCwRo
 
 ## Em breve
