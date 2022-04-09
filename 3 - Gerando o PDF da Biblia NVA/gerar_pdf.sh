@@ -7,4 +7,5 @@
 # Info   : 
 ###################################################################################
 
-wkhtmltopdf 'localhost/biblianva/'  'bibliaNVA.pdf'
+wkhtmltopdf 'localhost/biblianva/'  'bibliaNVA sem capa.pdf'
+pdfunite    'capa.pdf' 'bibliaNVA sem capa.pdf' 'bibliaNVA.pdf'
