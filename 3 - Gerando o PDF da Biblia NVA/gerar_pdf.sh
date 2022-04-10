@@ -6,6 +6,7 @@
 # Data   : 2022-03-19 18:14:20
 # Info   : 
 ###################################################################################
+# Margem L R T B
+wkhtmltopdf -L 0 -R 0 -T 2 -B 2 --page-size A4 --dpi 600  'localhost/biblianva/'  'bibliaNVA.pdf'
+# pdfunite    'capa.pdf' 'bibliaNVA sem capa.pdf' 'bibliaNVA.pdf'
 
-wkhtmltopdf 'localhost/biblianva/'  'bibliaNVA sem capa.pdf'
-pdfunite    'capa.pdf' 'bibliaNVA sem capa.pdf' 'bibliaNVA.pdf'
