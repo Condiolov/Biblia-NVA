@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@200&family=Jura:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap');
+
+h1 { font-size: 50px;  text-align: center; /*margin-bottom: 1rem;*/
+    font-family: 'Rubik', sans-serif;
+    font-size: 72px;
+    line-height: 72px;
+    font-weight: 700;
+}
+
+h2{
+    font-size: 2em;
+    font-family: 'Jura', sans-serif;
+    font-style: normal;
+    text-align: center;
+        margin: 0;
+}
+body center h3 {
+    font-family: 'Rubik', sans-serif;
+    font-size: 30px;
+    /*     line-height: 1px; */
+    font-style: normal;
+}
+
+html body {
+       font-family: 'Rubik', sans-serif;
+    /*     font-style: normal; */
+    min-height: 100% !important; height: 100%; margin: 0;
+}
+
+	body {
+	text-align: justify;
+
+	/*line-height: 20 px;*/
+	/*height: auto; width: 209mm;*/
+  }
+
+
+#biblia { padding: 20px;
+/* margin-top: 50px;*/
+font-family: 'Jura', sans-serif;
+height:auto;
+display:block;
+position: relative;
+font-size: 20px;
+}
+
+#c{ font-size: 80px;
+    font-weight: bold;
+    float: left;
+    line-height: 60px;
+    vertical-align: baseline;
+    }
+sup { vertical-align: top; font-size: 13.333333333333px;  font-weight: bold;}
+
+#logo {
+width: 100%;
+}
+    .col1 {
+    float: left;
+    width: 10%;
+    }
+    .col2 {
+    display: table;
+    width: 88%;
+    margin:auto;
+    }
+    /* Clear floats after the columns */
+    .row:after {
+    content: "";
+    display: table;
+    clear: both;
+    }
+    .col2 p {
+    font-family: 'Rubik', sans-serif;
+    display: inline;
+    font-size: 20px;
+    margin: 5px;
+    }
+    .col1 p {
+    display: inline-block;
+    font-size: 20px;
+    line-height: 20px;
+    margin: 5px;
+    cursor: pointer;
+    width: 25px;
+
+    }
+    #versos {
+    text-align: justify;
+    display: block;
+    }
+    select{
+    width: 100%;
+    font-size: 20px;
+    }

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<link rel="stylesheet" href="./style.css">
+<title>Bíblia NVA</title>
+</head>
+<body>
+<script>
+// Variaveis de escolha OPcionais de controle do usuario
+var op_livro, op_capitulos;
+
+// Nomes dos livros em ordem de Gênesis (1) a Apocalipse (66)
+const livro=["","Gênesis","Êxodo","Levítico","Números","Deuteronômio","Josué","Juízes","Rute","1 Samuel","2 Samuel","1 Reis","2 Reis","1 Crônicas","2 Crônicas","Esdras","Neemias","Ester","Jó","Salmos","Provérbios","Eclesiastes","Cânticos","Isaías","Jeremias","Lamentações","Ezequiel","Daniel","Oséias","Joel","Amós","Obadias","Jonas","Miquéias","Naum","Habacuque","Sofonias","Ageu","Zacarias","Malaquias","Mateus","Marcos","Lucas","João","Atos","Romanos","1 Coríntios","2 Coríntios","Gálatas","Efésios","Filipenses","Colossenses","1 Tessalonicenses","2 Tessalonicenses","1 Timóteo","2 Timóteo","Tito","Filemom","Hebreus","Tiago","1 Pedro","2 Pedro","1 João","2 João","3 João","Judas","Apocalipse"];
+
+// Variavel responsavel por guardar toda a biblia em json
+var bibliaNVA;
+
+// ini do document ready -> Assim que a pagina é carregada faça
+$(document).ready(function() {
+
+    // Leio o json da biblia toda e carrego pra uma variavel;
+    $.getJSON('../2 - SQL, JSON e CSV da Bíblia/bibliaNVA.json', function(biblia){
+        bibliaNVA = biblia;
+        limpa(); // Apenas para mostrar Genesis 1
+    });
+
+
+
+}); // fim do document ready
+
+// Limpa a tela para reescrever os versos escolhidos
+function limpa (){
+    $(".op_capitulos").html("");
+    $('#versos').html("");
+    $("#op_livros").html("");
+    bibliaNVA.forEach(mostre_versos);
+    $("#versos").html($("#versos").html().replaceAll("Yahweh", "<b>Yahweh</b>").replaceAll("Deus", "<b>Deus</b>"));
+}
+
+var capitulo, versos, titulo;
+// Percorre toda a biblia
+function mostre_versos(linha) {
+
+    if (linha.l != op_livro){
+        op_livro = linha.l;
+        titulo = '<h1 id="livro">'+livro[op_livro]+'</h1>'; // Nome do Livro
+    }else
+        titulo="";
+    if (linha.c != op_capitulos){ // apenas para nao repetir umas vez que cada versos contem livro, cap,
+        capitulo = "<p id='c' id='ir_"+linha.l+"_"+linha.c+"'>" + linha.c + " </p>";
+        op_capitulos = linha.c;
+    }else
+        capitulo="";
+
+    if(linha.v)
+        $("#teste").append(titulo+capitulo+'<sup>'+linha.n+'</sup>'+'<p>'+linha.v+'</p>');
+
+
+}
+
+</script>
+<div class="col2">
+<span id="teste"></span> <span id="capitulos"></span>
+<p id="versos"></p>
+</div>
+</body>
+</html>
