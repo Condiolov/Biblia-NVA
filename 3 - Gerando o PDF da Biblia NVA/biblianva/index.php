@@ -13,6 +13,11 @@ if ( file_exists ($_SERVER['DOCUMENT_ROOT'].'/../.meuBD')){
 	$BD_config = file($_SERVER['DOCUMENT_ROOT'].'/../.meuBD', true);
 	preg_match_all('/(.+)=(.+)/m', implode("",$BD_config), $matches);
 	$BD_config=array_combine($matches[1],$matches[2]);
+}else{
+	$BD_config['servidor'] = "localhost";
+	$BD_config['banco']    = "meuBD";
+	$BD_config['usuario']  = "usuario";
+	$BD_config['senha']    = "senha";
 }
 
 function conectar(){
