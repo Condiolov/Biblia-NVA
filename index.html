@@ -2,64 +2,129 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <link rel="stylesheet" href="./html/style.css">
+    <link rel="stylesheet" href="./style.css">
     <title>Bíblia NVA</title>
 </head>
 <body>
-    <script>
-    // Variaveis de escolha OPcionais de controle do usuario
-    var op_livro, op_capitulos;
+<script>
+// Variaveis de escolha OPcionais de controle do usuario
+var op_livro, op_capitulos;
+var grifar = ["Yahweh","Deus"]; // Destacar palavras!!
+// Nomes dos livros em ordem de Gênesis (1) a Apocalipse (66)
+const livro=["","Gênesis","Êxodo","Levítico","Números","Deuteronômio","Josué","Juízes","Rute","1 Samuel","2 Samuel","1 Reis","2 Reis","1 Crônicas","2 Crônicas","Esdras","Neemias","Ester","Jó","Salmos","Provérbios","Eclesiastes","Cânticos","Isaías","Jeremias","Lamentações","Ezequiel","Daniel","Oséias","Joel","Amós","Obadias","Jonas","Miquéias","Naum","Habacuque","Sofonias","Ageu","Zacarias","Malaquias","Mateus","Marcos","Lucas","João","Atos","Romanos","1 Coríntios","2 Coríntios","Gálatas","Efésios","Filipenses","Colossenses","1 Tessalonicenses","2 Tessalonicenses","1 Timóteo","2 Timóteo","Tito","Filemom","Hebreus","Tiago","1 Pedro","2 Pedro","1 João","2 João","3 João","Judas","Apocalipse"];
 
-    // Nomes dos livros em ordem de Gênesis (1) a Apocalipse (66)
-    const livro=["","Gênesis","Êxodo","Levítico","Números","Deuteronômio","Josué","Juízes","Rute","1 Samuel","2 Samuel","1 Reis","2 Reis","1 Crônicas","2 Crônicas","Esdras","Neemias","Ester","Jó","Salmos","Provérbios","Eclesiastes","Cânticos","Isaías","Jeremias","Lamentações","Ezequiel","Daniel","Oséias","Joel","Amós","Obadias","Jonas","Miquéias","Naum","Habacuque","Sofonias","Ageu","Zacarias","Malaquias","Mateus","Marcos","Lucas","João","Atos","Romanos","1 Coríntios","2 Coríntios","Gálatas","Efésios","Filipenses","Colossenses","1 Tessalonicenses","2 Tessalonicenses","1 Timóteo","2 Timóteo","Tito","Filemom","Hebreus","Tiago","1 Pedro","2 Pedro","1 João","2 João","3 João","Judas","Apocalipse"];
+// Variaveis de controle representa o livro e o capitulo atual.
+var set_livro=1;
+var set_capitulo=1;  // seta capitulo
+var set_versiculo=""; //sublinha o versiculo no contexto
 
-    // Variaveis de controle representa o livro e o capitulo atual.
-    var set_livro=1
-    var set_capitulo=1;
 
-    // Variavel responsavel por guardar toda a biblia em json
-    var bibliaNVA;
+//Buscas
+var total_busca = 1; // numero de buscas
+var busca = "";     // palavras a ser buscadas
+var termos = [];   // palavras buscadas
+var bibliaNVA;    // Variavel responsavel por guardar toda a biblia em json
 
-    // ini do document ready -> Assim que a pagina é carregada faça
-    $(document).ready(function() {
+// ini do document ready -> Assim que a pagina é carregada faça
+$(document).ready(function() {
+
+    // Caso tenha parametros da URL ou abra pelo link
+    set_livro = $.urlParam('l') ? $.urlParam('l') : 1;
+    set_capitulo = $.urlParam('c') ? $.urlParam('c') : 1;
+    set_versiculo = $.urlParam('v') ? $.urlParam('v') : "";
+    $("#buscar").val(decodeURIComponent($.urlParam('buscar')));
+
 
     // Leio o json da biblia toda e carrego pra uma variavel;
-    $.getJSON('./2 - SQL, JSON e CSV da Bíblia/bibliaNVA.json', function(biblia){
-        bibliaNVA = biblia;
-       limpa(); // Apenas para mostrar Genesis 1
+    $.getJSON('bibliaNVA.json', function(tudo){
+        bibliaNVA = tudo;
+        if($("#buscar").val() != "") // caso tenha uma busca vinda da URL
+            buscar_acao();
+        else
+            mostre();
     });
 
-    // Escolha do Livro da biblia Genesis e Apocalipse
+
+    // Escolha dos livros depois de listado (Genesis e Apocalipse)
     $('select').on('change', function() {
         set_livro= this.value;
         set_capitulo=1;
-        limpa();
+        set_versiculo="";
+        busca = "";
+        mostre();
     });
 
-    // Escolha capitulo, resumidamente, carregue o capitulo clicado para uma var, limpa a tela e abra a biblia na var escolhida
+    // Apos escolhido o livro é listado os capitulos para escolha
     $( ".op_capitulos" ).on( "click", "p", function() {
         set_capitulo = this.id;
-        limpa();
+        set_versiculo="";
+        mostre();
     });
 
-    }); // fim do document ready
+    // link dos versiculos buscados
+    $( "#versos" ).on( "click", "a", function() {
+        set_livro = $.urlParam("l",this);
+        set_capitulo = $.urlParam("c",this);
+        set_versiculo = $.urlParam("v",this);
+        window.location.replace("#?buscar=" + termos.join(" ") + "&l=" + set_livro + "&c=" + set_capitulo + "&v=" + set_versiculo);
+        busca = "";
+        mostre();
+        event.preventDefault();  // evita abrir o link
 
-    // Limpa a tela para reescrever os versos escolhidos
-    function limpa (){
-        $(".op_capitulos").html("");
-        $('#versos').html("");
-        $("#op_livros").html("");
-        bibliaNVA.forEach(mostre_versos);
-        $("#versos").html($("#versos").html().replaceAll("Yahweh", "<b>Yahweh</b>").replaceAll("Deus", "<b>Deus</b>"));
-    }
+    });
 
-    // Percorre toda a biblia
-    function mostre_versos(linha) {
+    // Excuta a busca com a tecla enter
+    $('#buscar').on('keypress', function(e){
+        if(e.keyCode == '13'){
+            set_versiculo="";
+            buscar_acao();
+
+        }
+    });
+
+}); // fim do document ready
+
+// Ação  de buscar as palavras
+function buscar_acao (){
+    busca = $("#buscar").val(); // pega o valor do input
+    termos= busca.split(' ').filter(Boolean) ; //remove arrays vazios, remove espaços a mais.
+    window.location.replace("#?buscar=" + termos.join(" ") + "&l=" + set_livro + "&c=" + set_capitulo + "&v=" + set_versiculo);
+    busca = sem_acentos (busca); // remove acentos
+    busca = busca.split(' ').filter(Boolean);
+    busca = busca.join(".*")+"|"+busca.reverse().join(".*"); //criar a regex  (p1 AND p2) OR (p2 AND p1)
+    if (set_versiculo != "")
+        busca="";
+
+    mostre();
+}
+
+
+// Limpa a tela para reescrever os versos escolhidos ou busados
+function mostre (){
+
+    $('.op_capitulos,#versos,#total_busca,#livro,#capitulos,#op_livros').html(""); // zera todas tags
+    total_busca = 1; // zera o total de termos de buscas
+    bibliaNVA.forEach(mostre_versos); //percorro todos os versos
+
+    grifar.forEach(item => {  //grifar paalvras em negrito
+        $("#versos").html( $("#versos").html().replace(new RegExp(item, "g"), '<b>'+item+'</b>'));
+    });
+
+    termos.forEach(item => { // grifa termos de busca
+        if(item.length>1){ //ignora palavras de uma letra só bug da tag <a> palavra "a"
+            var regex = new RegExp("("+item+")", 'gi');
+            $("#versos").html( $("#versos").html().replace(regex, "<r>$1</r>"));
+        }
+    });
+}
+
+// Percorre toda as linhas da Biblia
+function mostre_versos(linha) {
 
     //Listo os livros para escolha no select
     if (linha.l != op_livro){
-
         if (set_livro==linha.l)
             $("#op_livros").append($('<option>', {value:linha.l, text:livro[linha.l], selected:true}));
         else
@@ -67,40 +132,77 @@
         op_livro = linha.l;
     }
 
-    // Listo capitulos do livro escolhido
-    if (linha.l == set_livro) // Livro Atual listar capitulos
-        if (linha.c != op_capitulos){ // apenas para nao repetir umas vez que cada versos contem livro, cap,
 
+    // Quando tem palavra para busca
+    if (busca != ""){
+        versos_sem_acentos = sem_acentos(linha.v); // remove os acentos dos versos para uma melhor busca
+        if (versos_sem_acentos.search(busca,"gi")!=-1) { // Caso tenha a palavra no verso
+            // Escreve o total de versos achados
+            $('#total_busca').html("<p>A busca <r>'"+  $("#buscar").val() +"'</r> resultou em <b>"+(total_busca++)+"</b> versos </p>");
+            // Escreve o verso achado com link para o capitulo(contexto)
+            $('#versos').append('<br> <b>>></b> '+linha.v+' <a target="_blank" href="?l='+linha.l+'&c='+linha.c+'&v='+linha.n+'"><b>'+ livro[linha.l] +' '+linha.c+'.'+linha.n+'</b></a><br>');
+
+        }
+        return// returno caso nao tenha a palavra nao exibir nada a baixo..
+    }
+
+    // Lista capitulos do livro escolhido
+    if (linha.l == set_livro) // Se é o livro atual listar capitulos
+        if (linha.c != op_capitulos){ // apenas para nao repetir umas vez que cada versos contem livro, cap,
             if (set_capitulo==linha.c)
                 $(".op_capitulos").append('<p style="background-color: #ccc;" id="'+linha.c+'">'+linha.c+'</p>')
                 else
-                $(".op_capitulos").append('<p id="'+linha.c+'">'+linha.c+'</p>');
+                    $(".op_capitulos").append('<p id="'+linha.c+'">'+linha.c+'</p>');
+
             op_capitulos = linha.c;
-
-
         }
 
-        // Listo versiculos do livro escolhido
+        // Escreve os versiculos do livro escolhido
         if (linha.l == set_livro)
             if (linha.c == set_capitulo){
                 $('#livro').html(livro[linha.l]); // Nome do Livro
                 $('#capitulos').html("<p id='c' id='ir_"+linha.l+"_"+linha.c+"'>" + linha.c + " </p>"); // Nome do Livro
-                $('#versos').append('<sup>'+linha.n+'</sup>'+'<p id="'+linha.n+'">'+linha.v+'</p>');
+                if (set_versiculo==linha.n) // sublinha o versiculo no contexto
+                    $('#versos').append('<sup>'+linha.n+'</sup>'+'<u><p id="'+linha.n+'">'+linha.v+'</p></u>');
+                else
+                    $('#versos').append('<sup>'+linha.n+'</sup>'+'<p id="'+linha.n+'">'+linha.v+'</p>');
             }
+}
 
-    }
+// FUNÇÃO Remove os acentos para fazer uma busca perfeita!
+sem_acentos = function(s){
 
-    </script>
+    var r = s?.toLowerCase() || ''; //? teste string vazia não aplica o remover acentos ou (s || '').toLowerCase();
+    non_asciis = {'a': '[àáâãäå]', 'ae': 'æ', 'c': 'ç', 'e': '[èéêë]', 'i': '[ìíîï]', 'n': 'ñ', 'o': '[òóôõö]', 'oe': 'œ', 'u': '[ùúûűü]', 'y': '[ýÿ]'};
+    for (i in non_asciis) { r = r.replace(new RegExp(non_asciis[i], 'g'), i); }
+    return r;
+};
+
+
+// FUNÇÃO que pega a URL e seta os paramentros GET
+$.urlParam = function(name, url=window.location.href){
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(url);
+    if (results==null)
+        return "";
+    else
+        return results[1] || 0;
+}
+
+</script>
     <div class="row">
         <div class="col1">
-            <img id="logo" src="./html/logo.png"><br>
-            <h2>Bíblia NVA</h2><select id="op_livros">
+            <a href="."><img id="logo" src="./logo.png"></a><br>
+            <h2>Bíblia NVA</h2><input type="text" name="buscar" id="buscar" placeholder="Faça uma busca.."><br>
+            <br>
+            <button onclick="set_versiculo=''; buscar_acao()">Buscar</button><br>
+            <br>
+            <select id="op_livros">
             </select><br>
+            <br>
             <span class="op_capitulos"></span>
         </div>
         <div class="col2">
-            <h1 id="livro"></h1>
-            <span id="capitulos"></span>
+            <h1 id="livro"></h1><span id="capitulos"></span> <span id="total_busca"></span>
             <p id="versos"></p>
         </div>
     </div>
